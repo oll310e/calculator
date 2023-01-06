@@ -1,7 +1,7 @@
 const container = document.querySelector('#container');
 
 const add = (term1, term2) => {
-    return term1 + term2;
+    return Number(term1) + Number(term2);
 }
 
 const subtract = (term1, term2) => {
@@ -32,12 +32,38 @@ const operate = (operator, num1, num2) => {
     };
 };
 
+
+let savedNumber = 0;
+let operatorUsed;
+
+const findAction = function(operation) {
+    savedNumber = Number(calculatorDisplay.innerText);
+    operatorUsed = operation;
+    calculatorDisplay.innerText = '';
+};
+
+const addToDisplay = function(newNumber) {
+    calculatorDisplay.innerText = calculatorDisplay.innerText + newNumber;
+};
+
+const clearAll = function() {
+    savedNumber = 0;
+    calculatorDisplay.innerText = '';
+};
+
+const evaluate = function() {
+    let currentNumber = calculatorDisplay.innerText;
+    let answer = operate(operatorUsed, savedNumber, currentNumber)
+    calculatorDisplay.innerText = answer.toString()
+    savedNumber = answer;
+};
+
 let calculator = document.createElement('div');
 calculator.style = 'border-radius: 5px; background-color: grey; border: 1px solid black; height: 400px; width: 250px;'
 
 let display = document.createElement('p');
 display.style = 'text-align: right; font-size: 30px;border-radius: 3px; border: 1px solid black; width: 80%; height: 20%; margin: 22px auto; background-color: white;';
-display.innerText = '213412'
+display.innerText = ''
 
 calculator.appendChild(display)
 
@@ -56,20 +82,33 @@ calculator.appendChild(buttonPart)
 
 for (let i = 0; i < 12; i++) {
     let newNumberButton = document.createElement('button');
-    newNumberButton.addEventListener('click', e => {
-        console.log(e.target.innerText);
-    });
-    newNumberButton.style = 'width: 40px; height: 40px; margin: 5px; background-color: aquamarine;';
+
+
+
     let text = i
-    if (i == 10) text = 'C'
-    if (i == 11) text = '='
+    if (i == 10) {
+        text = 'C'
+        newNumberButton.addEventListener('click', e => {
+            clearAll()
+        });
+    } else if (i == 11) {
+        text = '='
+        newNumberButton.addEventListener('click', e => {
+            evaluate()
+        });
+    } else {
+        newNumberButton.addEventListener('click', e => {
+            let newNumber = e.target.innerText;
+            addToDisplay(newNumber)
+        });
+    }
+
+    
+    
+    newNumberButton.style = 'width: 40px; height: 40px; margin: 5px; background-color: aquamarine;';
     newNumberButton.innerText = `${text}`;
     numberPart.appendChild(newNumberButton);
 };
-
-for (let i = 0; i< 2; i++) {
-
-}
 
 for (let i = 0; i < 4; i++) {
     let text = ''
@@ -89,13 +128,14 @@ for (let i = 0; i < 4; i++) {
     }
     let newOperatorButton = document.createElement('button');
     newOperatorButton.addEventListener('click', e => {
-        console.log(e.target.innerText);
+        let operation = e.target.innerText;
+        findAction(operation);
     });
     newOperatorButton.style = 'width: 40px; height: 40px; margin: 5px; background-color: aqua;';
     newOperatorButton.innerText = `${text}`;
     operatorPart.appendChild(newOperatorButton);
 };
 
-
-
 container.appendChild(calculator)
+
+const calculatorDisplay = document.querySelector('p');
