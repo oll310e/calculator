@@ -9,11 +9,15 @@ const subtract = (term1, term2) => {
 }
 
 const multiply = (term1, term2) => {
-    return term1 * term2;
+    return Math.round((term1 * term2) * 100) / 100 ;
 }
 
 const divide = (term1, term2) => {
-    return term1 / term2;
+    if (term1 == '0' || term2 == '0'){
+        alert('naughty naughty, "dont divide by 0"')
+        return
+    }
+    return Math.round((term1 / term2) * 100) / 100 ;
 }
 
 
@@ -62,7 +66,7 @@ let calculator = document.createElement('div');
 calculator.style = 'border-radius: 5px; background-color: grey; border: 1px solid black; height: 400px; width: 250px;'
 
 let display = document.createElement('p');
-display.style = 'text-align: right; font-size: 30px;border-radius: 3px; border: 1px solid black; width: 80%; height: 20%; margin: 22px auto; background-color: white;';
+display.style = 'overflow-x: scroll; text-align: right; font-size: clamp(10px, 30px, 30px);border-radius: 3px; border: 1px solid black; width: 80%; height: 20%; margin: 22px auto; background-color: white;';
 display.innerText = ''
 
 calculator.appendChild(display)
